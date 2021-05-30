@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>
+    ファイル出力を行う外部EXE起動のプログレスバー表示を
+    AJAXで出来るか？
+</h2>
+
+    ボタンを押すとここの値が更新されます
+<input type="text" value="1" id="textbox" name="str" />
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="更新" id="getButton" class="btn btn-default" />
+    </div>
+    <div class="list-group ">
+        @Html.ActionLink("ロード直後から開始", "StartProgress", "Progress", null, new { @class = "list-group-item mt-4", target = "_blank" })
+        <input type="submit" value="ダウンロード" id="download" class="btn btn-default list-group-item mt-4" />
+    </div>
+</div>
+
+
+<script>
+    my_valu = 1;
+$(function () {
+    $('#getButton').click(function () {
+
+        //$('#textbox').val("hogehoge");
+        @*$.get('@Url.Action("GetAjaxTest1", "Home")',
+            { text: $('#textbox').val() },
+            function (data) {
+                //console.log(JSON.stringify(data));
+                $('#textbox').val(data['returnText']);
+            }
+        );*@
+
+        setInterval(
+            function () {
+                $.ajax({
+                    url: "GetAjaxTest1",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: my_valu ,
+                    timout: 500,
+                    success: function (data) {
+                        $('#textbox').val(data['returnText']);
+                        my_valu = data['returnText'];
+                    }
+                });
+            }, 100
+        );
+    });
+
+    $('#download').click(function () {
+        //$.get("download/" + "1234");
+        window.location.href = "download/" + "1234";
+    });
+});
+</script>
